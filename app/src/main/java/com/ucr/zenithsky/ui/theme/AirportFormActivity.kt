@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.ucr.zenithsky.data.OperacionLog
+import com.ucr.zenithsky.entity.OperacionLog
 import com.ucr.zenithsky.data.ZenithDatabase
 import com.ucr.zenithsky.model.AirportRequest
 import com.ucr.zenithsky.model.parseApiError

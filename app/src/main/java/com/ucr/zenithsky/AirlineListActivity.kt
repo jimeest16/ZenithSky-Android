@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.ucr.zenithsky.data.OperacionLog
+import com.ucr.zenithsky.entity.OperacionLog
 import com.ucr.zenithsky.data.ZenithDatabase
 import com.ucr.zenithsky.model.Airline
 import com.ucr.zenithsky.model.parseApiError

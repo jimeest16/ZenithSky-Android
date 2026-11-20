@@ -4,34 +4,18 @@ import android.content.Context
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
-import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Entity
+import com.ucr.zenithsky.entity.AvionDestacado
+import com.ucr.zenithsky.entity.OperacionLog
 import kotlinx.coroutines.flow.Flow
 
-// Entidades de Room para la base de datos local SQLite
-@Entity(tableName = "operacion_log")
-data class OperacionLog(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val entidad: String,
-    val accion: String,
-    val detalle: String,
-    val creadoEn: Long = System.currentTimeMillis()
-)
 
-@Entity(tableName = "avion_destacado")
-data class AvionDestacado(
-    @PrimaryKey val airplaneId: Int,
-    val capacity: Int,
-    val tipoAvion: String,
-    val aerolinea: String
-)
-
-// DAO con funciones suspend y Flow<List<...>> para flujos reactivos en Compose
 @Dao
 interface ZenithDao {
     @Insert
@@ -50,7 +34,6 @@ interface ZenithDao {
     fun obtenerDestacados(): Flow<List<AvionDestacado>>
 }
 
-// Base de datos Room con patrón Singleton en companion object
 @Database(
     entities = [OperacionLog::class, AvionDestacado::class],
     version = 1,

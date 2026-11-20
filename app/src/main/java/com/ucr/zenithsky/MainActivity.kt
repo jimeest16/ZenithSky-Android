@@ -25,9 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.ucr.zenithsky.data.AvionDestacado
-import com.ucr.zenithsky.data.OperacionLog
+
 import com.ucr.zenithsky.data.ZenithDatabase
+import com.ucr.zenithsky.entity.AvionDestacado
+import com.ucr.zenithsky.entity.OperacionLog
 import com.ucr.zenithsky.ui.theme.ZenithSkyAppTheme
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
