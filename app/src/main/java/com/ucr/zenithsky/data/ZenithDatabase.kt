@@ -1,80 +1,63 @@
 package com.ucr.zenithsky.data
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Delete
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
+// Entidades de Room para la base de datos local SQLite
+@Entity(tableName = "operacion_log")
 data class OperacionLog(
-    val id: Int = (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val entidad: String,
     val accion: String,
     val detalle: String,
     val creadoEn: Long = System.currentTimeMillis()
 )
 
+@Entity(tableName = "avion_destacado")
 data class AvionDestacado(
-    val airplaneId: Int,
+    @PrimaryKey val airplaneId: Int,
     val capacity: Int,
     val tipoAvion: String,
     val aerolinea: String
 )
 
-class ZenithDao(context: Context) {
-    private val prefs = context.getSharedPreferences("ZenithSkyLocalDB", Context.MODE_PRIVATE)
-    private val gson = Gson()
+// DAO con funciones suspend y Flow<List<...>> para flujos reactivos en Compose
+@Dao
+interface ZenithDao {
+    @Insert
+    suspend fun insertarLog(log: OperacionLog)
 
-    private val _logsFlow = MutableStateFlow(cargarLogs())
-    private val _destacadosFlow = MutableStateFlow(cargarDestacados())
+    @Query("SELECT * FROM operacion_log ORDER BY creadoEn DESC")
+    fun obtenerLogs(): Flow<List<OperacionLog>>
 
-    private fun cargarLogs(): List<OperacionLog> {
-        val json = prefs.getString("logs", null) ?: return emptyList()
-        val type = object : TypeToken<List<OperacionLog>>() {}.type
-        return gson.fromJson(json, type) ?: emptyList()
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun destacarAvion(avion: AvionDestacado)
 
-    private fun guardarLogs(lista: List<OperacionLog>) {
-        prefs.edit().putString("logs", gson.toJson(lista)).apply()
-        _logsFlow.value = lista
-    }
+    @Delete
+    suspend fun quitarDestacado(avion: AvionDestacado)
 
-    private fun cargarDestacados(): List<AvionDestacado> {
-        val json = prefs.getString("destacados", null) ?: return emptyList()
-        val type = object : TypeToken<List<AvionDestacado>>() {}.type
-        return gson.fromJson(json, type) ?: emptyList()
-    }
-
-    private fun guardarDestacados(lista: List<AvionDestacado>) {
-        prefs.edit().putString("destacados", gson.toJson(lista)).apply()
-        _destacadosFlow.value = lista
-    }
-
-    suspend fun insertarLog(log: OperacionLog) {
-        val actual = listOf(log) + cargarLogs()
-        guardarLogs(actual)
-    }
-
-    fun obtenerLogs(): Flow<List<OperacionLog>> = _logsFlow.asStateFlow()
-
-    suspend fun destacarAvion(avion: AvionDestacado) {
-        val actual = cargarDestacados().filterNot { it.airplaneId == avion.airplaneId } + avion
-        guardarDestacados(actual.sortedBy { it.airplaneId })
-    }
-
-    suspend fun quitarDestacado(avion: AvionDestacado) {
-        val actual = cargarDestacados().filterNot { it.airplaneId == avion.airplaneId }
-        guardarDestacados(actual)
-    }
-
-    fun obtenerDestacados(): Flow<List<AvionDestacado>> = _destacadosFlow.asStateFlow()
+    @Query("SELECT * FROM avion_destacado ORDER BY airplaneId ASC")
+    fun obtenerDestacados(): Flow<List<AvionDestacado>>
 }
 
-class ZenithDatabase private constructor(context: Context) {
-    private val dao = ZenithDao(context.applicationContext)
-
-    fun zenithDao(): ZenithDao = dao
+// Base de datos Room con patrón Singleton en companion object
+@Database(
+    entities = [OperacionLog::class, AvionDestacado::class],
+    version = 1,
+    exportSchema = false
+)
+abstract class ZenithDatabase : RoomDatabase() {
+    abstract fun zenithDao(): ZenithDao
 
     companion object {
         @Volatile
@@ -82,7 +65,11 @@ class ZenithDatabase private constructor(context: Context) {
 
         fun getDatabase(context: Context): ZenithDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = ZenithDatabase(context)
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    ZenithDatabase::class.java,
+                    "zenithsky_local.db"
+                ).build()
                 INSTANCE = instance
                 instance
             }

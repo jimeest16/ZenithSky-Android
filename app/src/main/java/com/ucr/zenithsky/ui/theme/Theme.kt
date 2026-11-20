@@ -12,15 +12,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
-    primary = ZenithBluePrimary,
+    primary = ZenithCobaltPrimary,
     onPrimary = ZenithOnPrimary,
     primaryContainer = ZenithPrimaryContainer,
     onPrimaryContainer = ZenithOnPrimaryContainer,
-    secondary = ZenithTealSecondary,
+    secondary = ZenithTurquoiseSecondary,
     onSecondary = ZenithOnSecondary,
     secondaryContainer = ZenithSecondaryContainer,
     onSecondaryContainer = ZenithOnSecondaryContainer,
-    tertiary = ZenithAmberTertiary,
+    tertiary = ZenithSoftVioletTertiary,
     onTertiary = ZenithOnTertiary,
     tertiaryContainer = ZenithTertiaryContainer,
     onTertiaryContainer = ZenithOnTertiaryContainer,
@@ -33,22 +33,24 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = ZenithBlueDark,
+    primary = ZenithCobaltDark,
     onPrimary = ZenithOnDark,
     primaryContainer = ZenithPrimaryContainerDark,
     onPrimaryContainer = ZenithOnPrimaryContainerDark,
-    secondary = ZenithTealDark,
+    secondary = ZenithTurquoiseDark,
     onSecondary = ZenithOnTealDark,
     secondaryContainer = ZenithSecondaryContainerDark,
     onSecondaryContainer = ZenithOnSecondaryContainerDark,
-    tertiary = ZenithAmberDark,
-    onTertiary = Color(0xFF2B1800),
+    tertiary = ZenithSoftVioletDark,
+    onTertiary = ZenithOnTertiaryDark,
+    tertiaryContainer = ZenithTertiaryContainerDark,
+    onTertiaryContainer = ZenithOnTertiaryContainerDark,
     background = ZenithBackgroundDark,
-    onBackground = Color(0xFFE6EEF6),
+    onBackground = Color(0xFFE8EEF8),
     surface = ZenithSurfaceDark,
-    onSurface = Color(0xFFE6EEF6),
+    onSurface = Color(0xFFE8EEF8),
     surfaceVariant = ZenithSurfaceVariantDark,
-    onSurfaceVariant = Color(0xFFB4C5D6)
+    onSurfaceVariant = Color(0xFFB7C6DC)
 )
 
 @Composable

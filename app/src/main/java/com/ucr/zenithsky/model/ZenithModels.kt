@@ -4,6 +4,9 @@ import org.json.JSONObject
 import retrofit2.Response
 
 // --- MODELOS DE RESPUESTA (GET) ---
+
+// aqui es donde se llena info de los endpoints
+// vacios
 data class Airport(
     val airportId: Int = 0,
     val iata: String = "",

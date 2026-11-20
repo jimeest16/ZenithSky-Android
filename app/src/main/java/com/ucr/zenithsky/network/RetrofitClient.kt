@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
+// suspend para que se ejecuten de forma asinronica sin bloquear la main
 interface ZenithApiService {
     // aeropuertos
     @GET("api/airports")

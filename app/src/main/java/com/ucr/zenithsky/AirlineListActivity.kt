@@ -36,6 +36,9 @@ import com.ucr.zenithsky.ui.theme.ZenithSkyAppTheme
 import kotlinx.coroutines.launch
 
 // CLASE DE LA ACTIVITY
+// aqui es donde se invocan las fun susoend
+//subrutinas
+// cada boton lleva una accion de network
 class AirlineListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
